@@ -45,9 +45,10 @@
       fetch(`${server}/convert`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        document.getElementById('message').value = result
+        document.getElementById('message').value = 'Font generated successfully'
         download(document.getElementById('fontname').value || 'rexfont', result)
-      });
+      })
+      .catch(error => document.getElementById('message').value = error);
     }
   </script>
 </body>
