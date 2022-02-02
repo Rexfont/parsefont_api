@@ -17,6 +17,7 @@
     <input id='fontname' name='fontname' placeholder="fontname"/>
     <input id='unicodePrefix' name='unicodePrefix' placeholder="unicodePrefix"/>
     <input id='file' type='file' name='file' />
+    <textarea id='message'></textarea>
   </form>
   <script>
     const server = '/parsefont';
@@ -43,7 +44,10 @@
     function convertorApi(requestOptions) {
       fetch(`${server}/convert`, requestOptions)
       .then(response => response.text())
-      .then(result => download(document.getElementById('fontname').value || 'rexfont', result));
+      .then(result => {
+        document.getElementById('message').value = result
+        download(document.getElementById('fontname').value || 'rexfont', result)
+      });
     }
   </script>
 </body>
