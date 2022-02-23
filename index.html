@@ -16,7 +16,7 @@
   <form id='form'>
     <input id='fontname' name='fontname' placeholder="fontname"/>
     <input id='unicodePrefix' name='unicodePrefix' placeholder="unicodePrefix"/>
-    <input id='file' type='file' name='file' />
+    <input id='file' multiple="multiple" type='file' name='file' />
     <textarea id='message'></textarea>
   </form>
   <script>
@@ -35,7 +35,11 @@
 
     function convertFile() {
       var formdata = new FormData();
-      formdata.append('file', document.getElementById('file').files[0], '/path/to/file');
+      var ins = document.getElementById('file').files;
+      for (var x = 0; x < ins.length; x++) {
+        formdata.append("fileToUpload[]", ins[x], '/path/to/file');
+      }
+      // formdata.append('files', document.getElementById('file').files[0], '/path/to/file');
       formdata.append('fontname', document.getElementById('fontname').value);
       formdata.append('unicodePrefix', document.getElementById('unicodePrefix').value);
       convertorApi({ method: 'POST', body: formdata, redirect: 'follow' })

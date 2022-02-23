@@ -5,7 +5,7 @@ const multer  = require('multer')
 const cors = require('cors')
 app.use(cors())
 const upload = multer({ dest: '../uploads/' })
-const parsefont = require('parsefont');
+const parsefont = require('../parsefont');
 const JSZip = require('jszip');
 const parsefontRoot = '/parsefont';
 const PORT = process.env.PORT || 8002;
@@ -19,8 +19,8 @@ app.get(`${parsefontRoot}/`, (req, res) => {
   res.sendFile(path.join(__dirname, `./index.html`));
 })
 
-app.post(`${parsefontRoot}/convert`, upload.single('file'), (req, res) => {
-  parsefont.get({ svgFile: path.join(__dirname, `./${req.file.path}`), ...req.body })
+app.post(`${parsefontRoot}/convert`, upload.array('fileToUpload[]'), (req, res) => {
+  parsefont.get({ svgFiles: req.files.map(file => path.join(__dirname, `./${file.path}`)), ...req.body })
   .then(fiels => {
     var zip = new JSZip();
     zip.file(`index.html`, fiels.html);
