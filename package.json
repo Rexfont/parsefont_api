@@ -12,7 +12,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "jszip": "^3.7.1",
-    "parsefont": "^3.2.1"
+    "parsefont": "^3.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
