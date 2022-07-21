@@ -20,7 +20,10 @@
     <textarea id='message'></textarea>
   </form>
   <script>
-    const server = '/parsefont';
+
+    // const server = 'http://localhost:8002/parsefont';
+    const server = 'https://api.rexfont.com/parsefont';
+
     function download(filename, text) {
       var element = document.createElement('a');
       element.setAttribute('href', 'data:application/zip;base64,' + encodeURIComponent(text));
@@ -33,16 +36,29 @@
 
     document.getElementById('file').addEventListener('change', convertFile)
 
-    function convertFile() {
+    async function convertFile() {
       var formdata = new FormData();
       var ins = document.getElementById('file').files;
+      const filesbase64 = []
       for (var x = 0; x < ins.length; x++) {
-        formdata.append("fileToUpload[]", ins[x], '/path/to/file');
+        // formdata.append("fileToUpload[]", ins[x], '/path/to/file');
+        const fileBuffer = await new Promise((resolve, reject) => {
+          var reader = new FileReader();
+          reader.onload = function() {resolve(this.result)}
+          reader.onerror = function(err) {reject(err)}
+          // reader.readAsArrayBuffer(ins[x])
+          reader.readAsText(ins[x])
+        })
+        // filesbase64.push(btoa(new Uint8Array(fileBuffer).reduce((data, byte) => data + String.fromCharCode(byte),'')));
+        filesbase64.push(fileBuffer);
       }
+      formdata.append('filesbase64', JSON.stringify(filesbase64));
       formdata.append('fontname', document.getElementById('fontname').value.length ? document.getElementById('fontname').value : 'rexfont');
       formdata.append('unicodePrefix', document.getElementById('unicodePrefix').value.length ? document.getElementById('unicodePrefix').value : 'RX');
       convertorApi({ method: 'POST', body: formdata, redirect: 'follow' })
     }
+
+
 
     function convertorApi(requestOptions) {
       fetch(`${server}/convert`, requestOptions)
