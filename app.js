@@ -5,7 +5,7 @@ const multer  = require('multer')
 const cors = require('cors')
 app.use(cors())
 const upload = multer({ dest: '../uploads/' })
-const parsefont = require('../parsefont');
+const parsefont = require('parsefont');
 const JSZip = require('jszip');
 const parsefontRoot = '/parsefont';
 const PORT = process.env.PORT || 8002;
